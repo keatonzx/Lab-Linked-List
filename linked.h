@@ -1,5 +1,7 @@
+//Header file for an implementation of a basic list ADT usuing the linked list data structure
+//Keaton Armstrong 
 
-//STRUCT
+//STRUCTS
 struct node{
   int data;
   struct node* next;
@@ -11,6 +13,7 @@ struct list{
   node_t* tail;
 };
 typedef struct list list_t;
+
 //FUNCTIONS
 node_t* createNode (int value);
 

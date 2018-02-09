@@ -1,7 +1,7 @@
 /*
 * Keaton Armstrong
 * Lab 5
-*
+*Implementation of a list ADT usuing linked list data structure 
 *
 *
 */
