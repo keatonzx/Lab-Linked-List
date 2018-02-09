@@ -15,6 +15,8 @@ node_t* createNode (int value);
 
 list_t createList();
 
+void deleteList(list_t *list);
+
 void printList(list_t list);
  
 bool isEmpty(list_t list);
