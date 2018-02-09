@@ -31,4 +31,6 @@ void listAppend(list_t* list, int value);
 
 void listPush(list_t *list, int value);
 
+int listPop(list_t *list);
+
 node_t* listFind(list_t list, int value);

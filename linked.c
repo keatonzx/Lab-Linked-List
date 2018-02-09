@@ -32,7 +32,8 @@ void listAppend(list_t *list, int value)
 {
   
   if(isEmpty(*list)){
-    list->head = createNode(value);
+    listPush(list,value);
+   // list->head = createNode(value);
   }
   else{
     
@@ -61,6 +62,23 @@ void listPush(list_t *list, int value)
   }
 }
 
+int listPop(list_t *list)
+{
+  assert(list->head != NULL);
+  
+  node_t* p = list->head;
+  int h = p->data;
+  
+  
+  if(p == list->tail){
+    deleteList(list);
+  }
+  else{
+    list->head = p->next;  
+    free(p);
+  }
+  return h;
+}
 
 node_t* listFind(list_t list, int value)
 {
@@ -162,6 +180,13 @@ void main()
   assert(listFind(list, 2) != NULL);
   assert(listFind(list, 99) != NULL);
   
+  
+  v = listPop(&list);
+  assert(v == 97);
+  v = listPop(&list);
+  assert(v == 98);
+ 
+  printList(list);
   deleteList(&list);
   assert(isEmpty(list));
  /* node_t *head = NULL;
