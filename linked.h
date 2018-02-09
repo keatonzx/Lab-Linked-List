@@ -26,3 +26,6 @@ int listLength(list_t list);
 
 void listAppend(list_t* list, int value);
 
+void listPush(list_t *list, int value);
+
+node_t* listFind(list_t list, int value);

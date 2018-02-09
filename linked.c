@@ -46,16 +46,37 @@ void listAppend(list_t *list, int value)
   }
 }
 
-/*node_t* listFind(list_t list)
+void listPush(list_t *list, int value)
+{
+  //printf("\n%d = value passed to push\n",value);
+  node_t *newNode = createNode(value);
+  
+  if(list->head == NULL){
+    list->head = newNode;
+    list->tail = newNode;
+  }
+  else{
+    newNode->next = list->head;
+    list->head = newNode;
+  }
+}
+
+
+node_t* listFind(list_t list, int value)
 {
   node_t* p = list.head;
   
   while (p != NULL){
-    
+    if (p->data == value){
+      return p;
+    }
+    else{
+      p = p->next;
+    }
   }
   
   
-}*/
+}
 bool isEmpty(list_t list)
 {
    return list.head == NULL;
@@ -63,9 +84,10 @@ bool isEmpty(list_t list)
 
 int listLength(list_t list)
 {
-  int i; 
+  int i = 0; 
   node_t* p = list.head;
   while (p != NULL){
+   // p = p->next;
     i++;
     p = p->next;
   }
@@ -116,8 +138,7 @@ void main()
   list_t list = createList();
   assert(isEmpty(list));
   assert(listLength(list) == 0);
-  
-  
+  assert(listFind(list, 1) == NULL);
   
   
   listAppend(&list, 1);
@@ -125,8 +146,22 @@ void main()
   listAppend(&list, 3);
   printList(list);
   printf("%d\n", listLength(list));
-  
+  assert(!isEmpty(list));
+  assert(listLength(list) == 3);
+  assert(listFind(list, 2) != NULL);
+  assert(listFind(list, 42) == NULL);
  
+  
+  listPush(&list, 99);
+  listPush(&list, 98);
+  listPush(&list, 97);
+  printList(list);
+  printf("%d\n", listLength(list));
+
+  assert(listLength(list) == 6);
+  assert(listFind(list, 2) != NULL);
+  assert(listFind(list, 99) != NULL);
+  
   deleteList(&list);
   assert(isEmpty(list));
  /* node_t *head = NULL;
