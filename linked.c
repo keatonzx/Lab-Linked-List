@@ -46,17 +46,32 @@ void listAppend(list_t *list, int value)
   }
 }
 
-
+/*node_t* listFind(list_t list)
+{
+  node_t* p = list.head;
+  
+  while (p != NULL){
+    
+  }
+  
+  
+}*/
 bool isEmpty(list_t list)
 {
    return list.head == NULL;
 }
 
-/*int listLength(list_t* list)
+int listLength(list_t list)
 {
   int i; 
-  while (list->)
-}*/
+  node_t* p = list.head;
+  while (p != NULL){
+    i++;
+    p = p->next;
+  }
+  return i;
+}
+
 void printList(list_t list){
   node_t* p = list.head;
   
@@ -100,7 +115,7 @@ void main()
   int v;
   list_t list = createList();
   assert(isEmpty(list));
-  //assert(listLength(list) == 0);
+  assert(listLength(list) == 0);
   
   
   
@@ -109,7 +124,9 @@ void main()
   listAppend(&list, 2);
   listAppend(&list, 3);
   printList(list);
- // printList(listtail);
+  printf("%d\n", listLength(list));
+  
+ 
   deleteList(&list);
   assert(isEmpty(list));
  /* node_t *head = NULL;
