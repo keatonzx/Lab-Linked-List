@@ -8,6 +8,7 @@ typedef struct node node_t;
 
 struct list{
   node_t* head;
+  node_t* tail;
 };
 typedef struct list list_t;
 //FUNCTIONS

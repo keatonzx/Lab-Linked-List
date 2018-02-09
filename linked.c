@@ -24,7 +24,7 @@ node_t* createNode (int value)
 
 list_t createList()
 {
-  list_t list = {NULL};
+  list_t list = {NULL,NULL};
   return list;
 }
 
@@ -42,6 +42,7 @@ void listAppend(list_t *list, int value)
         p = p->next;
       }
       p->next = createNode(value);
+      list->tail = p->next;
   }
 }
 
@@ -60,11 +61,26 @@ void printList(list_t list){
   node_t* p = list.head;
   
   while(p != NULL){
-    printf("[%d]-->", p->data);
+    if (p == list.head) {
+      printf("h");
+    }
+    
+    printf("[%d]", p->data);
+    
+    if (p == list.tail) {
+      printf("t");
+    }
+    if (p->next ==NULL) {
+      printf("-|");
+    }
+    else {
+      printf("-->");
+    }
     p = p->next;
   }
   printf("\n");
 }
+
 void deleteList(list_t *list)
 {
   node_t* q = list->head;
@@ -78,6 +94,7 @@ void deleteList(list_t *list)
     list->head = q;
   }
 }
+
 void main()
 {
   int v;
@@ -92,7 +109,7 @@ void main()
   listAppend(&list, 2);
   listAppend(&list, 3);
   printList(list);
-  
+ // printList(listtail);
   deleteList(&list);
   assert(isEmpty(list));
  /* node_t *head = NULL;
