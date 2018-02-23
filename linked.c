@@ -1,6 +1,6 @@
 /*
 * Keaton Armstrong
-* Lab 5
+* Lab 5 and 6 
 *Implementation of a list ADT usuing linked list data structure 
 *
 *
@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <limits.h>
 
 #include "linked.h"
 
@@ -24,19 +25,48 @@ node_t* createNode (int value)
 
 list_t createList()
 {
-  list_t list = {NULL,NULL};
+  node_t* dummy = createNode(INT_MIN);
+  list_t list = {dummy,dummy};
   return list;
+}
+
+void llLinkAfter(list_t* list, node_t* cur, node_t* newNode)
+{
+  //node_t* newNode = createNode(data);
+  if(cur == list->tail){
+    list->tail = newNode;
+  }
+  newNode->next = cur->next;
+  cur->next = newNode;
+}
+
+node_t* llUnlinkAfter(list_t* list, node_t* cur)
+{
+ node_t* p = cur->next;
+ 
+  if(p != NULL){
+    cur->next = p->next;
+  }
+  if(cur->next==NULL){
+    list->tail = cur;
+  }
+  return p;
+}
+
+void llInsert(list_t* list, node_t* cur, int data)
+{
+  node_t* newNode = createNode(data);
+  llLinkAfter(list,cur,newNode);
 }
 
 void listAppend(list_t *list, int value)
 {
-  
+  node_t *newNode = createNode(value);
+  llInsert(list,list->tail,value);
+  /*
   if(isEmpty(*list)){
     listPush(list,value);
-   // list->head = createNode(value);
-  }
-  else{
-    
+  } else{
       node_t* p = list->head;
 
       while(p->next != NULL){
@@ -44,68 +74,59 @@ void listAppend(list_t *list, int value)
       }
       p->next = createNode(value);
       list->tail = p->next;
-  }
+  }*/
 }
 
 void listPush(list_t *list, int value)
 {
-  //printf("\n%d = value passed to push\n",value);
-  node_t *newNode = createNode(value);
+  //llInsert(list,list->tail,value);
   
-  if(list->head == NULL){
-    list->head = newNode;
+  node_t *newNode = createNode(value);
+  llInsert(list,list->head,value);
+/*
+  if(list->head->next == NULL){
+    list->head->next = newNode;
     list->tail = newNode;
-  }
-  else{
-    newNode->next = list->head;
-    list->head = newNode;
-  }
+  } else{
+    newNode->next = list->head->next;
+    list->head->next = newNode;
+  }*/
 }
 
 int listPop(list_t *list)
 {
-  assert(list->head != NULL);
+  assert(list->head->next != NULL);
   
-  node_t* p = list->head;
-  int h = p->data;
+  node_t* p = list->head->next;
+  int value = p->data;
+  llRemove(list,p);
   
-  
-  if(p == list->tail){
-    deleteList(list);
-  }
-  else{
-    list->head = p->next;  
-    free(p);
-  }
-  return h;
+  return value;
 }
 
 node_t* listFind(list_t list, int value)
 {
-  node_t* p = list.head;
+  node_t* p = list.head->next;
   
   while (p != NULL){
     if (p->data == value){
       return p;
-    }
-    else{
+    } else{
       p = p->next;
     }
   }
-  
-  
 }
+
 bool isEmpty(list_t list)
 {
-   return list.head == NULL;
+   return list.head->next == NULL;
 }
 
 int listLength(list_t list)
 {
   int i = 0; 
-  node_t* p = list.head;
+  node_t* p = list.head->next;
   while (p != NULL){
-   // p = p->next;
     i++;
     p = p->next;
   }
@@ -113,10 +134,10 @@ int listLength(list_t list)
 }
 
 void printList(list_t list){
-  node_t* p = list.head;
+  node_t* p = list.head->next;
   
   while(p != NULL){
-    if (p == list.head) {
+    if (p == list.head->next) {
       printf("h");
     }
     
@@ -135,24 +156,45 @@ void printList(list_t list){
   }
   printf("\n");
 }
+void llRemove(list_t* list, node_t* cur)
+{
+  node_t* p = findPrevNode(list,cur);
+  free(llUnlinkAfter(list,p));
+  
+}
+node_t* findPrevNode(list_t* list, node_t* cur)
+{
+  node_t* p = list->head;
+  
+  while(p->next != cur)
+  {
+    if(p->next == list->tail){
+      return p;
+    }    
+    p = p->next;
+  } 
+  return p;
+}
 
 void deleteList(list_t *list)
 {
-  node_t* q = list->head;
+  node_t* q = list->head->next;
   
   printf("\n");
   
   while(q != NULL){
     q = q->next;
-    printf("Freeing the node [%d]\n",list->head->data);
-    free(list->head);
-    list->head = q;
+    printf("Freeing the node [%d]\n",list->head->next->data);
+    free(list->head->next);
+    list->head->next = q;
   }
 }
 
 void main()
 {
   int v;
+  node_t* tmp;
+  
   list_t list = createList();
   assert(isEmpty(list));
   assert(listLength(list) == 0);
@@ -189,32 +231,62 @@ void main()
   printList(list);
   deleteList(&list);
   assert(isEmpty(list));
- /* node_t *head = NULL;
-  head = createNode(42);
-  head->next = createNode(24);
-  head->next->next = createNode(9000);
-  printNode(head);
   
-  node_t *p = head;
+  // Ex. 1 Tests: Link / Unlink (white-box tests)
+  printf("\nLink/ Unlink tests... \n");
+  llLinkAfter(&list, list.head, createNode(100));
+  llLinkAfter(&list, list.head->next, createNode(102));
+  llLinkAfter(&list, list.head->next, createNode(101));
+  llLinkAfter(&list, list.tail, createNode(103));
+  printList(list);
   
-  while(p != NULL){
-    printf("[%d]-->", p->data);
-    
-    if(p->next == NULL){
-      printf("|||");
-    }
-    p = p->next;
-  }
+  assert(listLength(list) == 4);
+  assert(llUnlinkAfter(&list, list.tail) == NULL);
+  assert(listLength(list) == 4);
+  tmp = llUnlinkAfter(&list, list.head->next);
+  printList(list);
   
-  node_t* q = head;
+  assert(listLength(list) == 3);
+  assert(tmp->data == 101);
+  free(tmp);
+  tmp = llUnlinkAfter(&list, list.head->next->next);
+  printList(list);
   
-  printf("\n");
+  assert(listLength(list) == 2);
+  assert(tmp->data == 103);
+  free(tmp);
+  tmp = llUnlinkAfter(&list, list.head);
+  printList(list);
   
-  while(q != NULL){
-    q = q->next;
-    printf("Freeing the node [%d]\n",head->data);
-    free(head);
-    head = q;
-  }*/
+  assert(listLength(list) == 1);
+  assert(tmp->data == 100);
+  free(tmp);
+  deleteList(&list);
+  assert(isEmpty(list));
+  
+  // Ex. 3 Tests:  Insert / Remove  (white-box tests)
+printf("\nInsert / Remove tests... \n");
+llInsert(&list, list.head, 100);
+llInsert(&list, list.head->next, 102);
+llInsert(&list, list.head->next, 101);
+llInsert(&list, list.tail, 103);
+printList(list);
+  
+assert(listLength(list) == 4);
+llRemove(&list, list.head->next->next);
+printList(list);
+  
+assert(listLength(list) == 3);
+llRemove(&list, list.tail);
+printList(list);
+  
+assert(listLength(list) == 2);
+llRemove(&list, list.head->next);
+printList(list);
+  
+assert(listLength(list) == 1);
+deleteList(&list);
+assert(isEmpty(list));
+  
 }
 

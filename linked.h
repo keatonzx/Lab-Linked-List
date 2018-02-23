@@ -34,3 +34,13 @@ void listPush(list_t *list, int value);
 int listPop(list_t *list);
 
 node_t* listFind(list_t list, int value);
+
+void llLinkAfter(list_t* list, node_t* cur, node_t* newNode);
+
+node_t* llUnlinkAfter(list_t* list, node_t* cur);
+
+void llInsert(list_t* list, node_t* cur, int data);
+
+void llRemove(list_t* list, node_t* cur);
+
+node_t* findPrevNode(list_t* list, node_t* cur);
