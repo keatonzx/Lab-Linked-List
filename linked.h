@@ -12,35 +12,35 @@ struct list{
   node_t* head;
   node_t* tail;
 };
-typedef struct list list_t;
+typedef struct list Linkedlist_t;
 
 //FUNCTIONS
-node_t* createNode (int value);
+node_t* nodeCreate (int value);
 
-list_t createList();
+Linkedlist_t llCreate();
 
-void deleteList(list_t *list);
+void llDelete(Linkedlist_t *list);
 
-void printList(list_t list);
+void llPrint(Linkedlist_t list);
  
-bool isEmpty(list_t list);
+bool llisEmpty(Linkedlist_t list);
 
-int listLength(list_t list);
+int listLength(Linkedlist_t list);
 
-void listAppend(list_t* list, int value);
+void llAppend(Linkedlist_t* list, int value);
 
-void listPush(list_t *list, int value);
+void llPush(Linkedlist_t *list, int value);
 
-int listPop(list_t *list);
+int llPop(Linkedlist_t *list);
 
-node_t* listFind(list_t list, int value);
+node_t* llFind(Linkedlist_t list, int value);
 
-void llLinkAfter(list_t* list, node_t* cur, node_t* newNode);
+void llLinkAfter(Linkedlist_t* list, node_t* cur, node_t* newNode);
 
-node_t* llUnlinkAfter(list_t* list, node_t* cur);
+node_t* llUnlinkAfter(Linkedlist_t* list, node_t* cur);
 
-void llInsert(list_t* list, node_t* cur, int data);
+void llInsert(Linkedlist_t* list, node_t* cur, int data);
 
-void llRemove(list_t* list, node_t* cur);
+void llRemove(Linkedlist_t* list, node_t* cur);
 
-node_t* findPrevNode(list_t* list, node_t* cur);
+node_t* findPrevNode(Linkedlist_t* list, node_t* cur);
